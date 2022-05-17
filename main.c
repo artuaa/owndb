@@ -178,7 +178,7 @@ void free_table(Table* table){
 }
 
 void print_prompt () {
-  printf("db >");
+  printf("db > ");
 }
 
 void read_input(InputBuffer* input_buffer){
