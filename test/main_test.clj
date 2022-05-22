@@ -15,9 +15,11 @@
 (defn clear []
   (sh "rm" "test.db"))
 
+(defmacro testing [desc & body]
+  `(clojure.test/testing ~desc (clear) ~@body))
+
 (t/deftest main
-  (t/testing "inserts and retrieves a row'"
-    (clear)
+  (testing "inserts and retrieves a row'"
     (match
      ["insert 1 user1 person1@example.com"
       "select"
@@ -28,17 +30,15 @@
        "Executed."
        "db > "]))
 
-  (t/testing "prints error message when table is full"
-    (clear)
+  (testing "prints error message when table is full"
     (def res (->> (range 1 1402)
                   (map (fn [i] (format "insert %1$s user%1$s person%1$s@example.com" i)))
                   (run-script)))
 
     (t/is (= "db > Error: Table full." (nth res (- (count res) 2)))))
 
-  (t/testing
+  (testing
     "allows inserting strings that are the maximum length"
-    (clear)
     (def long_username (apply str (repeat 32 "a")))
     (def long_email (apply str (repeat 255 "a")))
     (match
@@ -51,9 +51,8 @@
        "Executed."
        "db > "]))
 
-  (t/testing
+  (testing
    "prints error message if strings are too long"
-    (clear)
     (def long_username (apply str (repeat 33 "a")))
     (def long_email (apply str (repeat 256 "a")))
     (match
@@ -65,9 +64,8 @@
        "db > Executed."
        "db > "]))
 
-  (t/testing
+  (testing
    "prints an error message if id is negative"
-    (clear)
     (match
      ["insert -1 hey hey"
       "select"
@@ -76,9 +74,8 @@
        "db > Executed."
        "db > "]))
 
-  (t/testing
+  (testing
       "keeps data after closing connection"
-    (clear)
     (match
      ["insert 1 user1 person1@example.com"
       ".exit"]
@@ -89,6 +86,4 @@
       ".exit"]
      ["db > (1, user1, person1@example.com)",
       "Executed."
-      "db > "]))
-
-  )
+      "db > "])))
