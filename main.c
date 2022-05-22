@@ -46,8 +46,8 @@ STATEMENT_INSERT
 #define COLUMN_EMAIL_SIZE 255
 typedef struct {
   uint32_t id;
-  char username[COLUMN_USERNAME_SIZE];
-  char email[COLUMN_EMAIL_SIZE];
+  char username[COLUMN_USERNAME_SIZE + 1];
+  char email[COLUMN_EMAIL_SIZE + 1];
 } Row;
 
 typedef struct {
@@ -210,7 +210,7 @@ int main (int argc, char* argv[]){
         case(META_COMMAND_SUCCESS):
           continue;
         case(META_COMMAND_UNRECOGNIZED_COMMAND):
-          printf("Unrecongnized command '%s'\n'", input_buffer->buffer);
+          printf("Unrecongnized command '%s'\n", input_buffer->buffer);
           continue;
       }
     }
@@ -232,7 +232,7 @@ int main (int argc, char* argv[]){
           printf("Executed.\n");
           break;
       case (EXECUTE_TABLE_FULL):
-          printf("Error: Table full.\n'");
+          printf("Error: Table full.\n");
           break;
     }
   }

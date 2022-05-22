@@ -9,7 +9,7 @@
 
 (defmacro match [script expected]
   `(let [result# (run-script ~script)]
-     (matcho/match ~expected result#)
+     (matcho/match result# ~expected)
      result#))
 
 (t/deftest main
@@ -20,7 +20,7 @@
       ".exit"]
 
      ["db > Executed."
-      "db > (1 user1, person1@example.com)"
+      "db > (1, user1, person1@example.com)"
       "Executed."
       "db > "]))
 
@@ -29,4 +29,24 @@
                   (map (fn [i] (format "insert %1$s user%1$s person%1$s@example.com" i)))
                   (run-script)))
 
-    (t/is (= "db > Error: Table full." (nth res (- (count res) 2))))))
+    (t/is (= "db > Error: Table full." (nth res (- (count res) 2)))))
+
+  (t/testing
+      "allows inserting strings that are the maximum length")
+  (def long_username (apply str (repeat 32 "a")))
+  (def long_email (apply str (repeat 255 "a")))
+  (match
+   [
+    (format "insert 1 %s %s" long_username long_email)
+    "select"
+    ".exit"
+    ]
+
+   [
+    "db > Executed."
+    (format "db > (1, %s, %s)" long_username long_email),
+    "Executed."
+    "db > "
+    ])
+
+  )
