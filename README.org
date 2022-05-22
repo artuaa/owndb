@@ -1,17 +1,31 @@
 #+TITLE: Build your owd database
 
+#+begin_quote
+ “What I cannot create, I do not understand.” – Richard Feynman
+#+end_quote
+
 + Tutorial https://cstack.github.io/db_tutorial
 
-* DONE Part 1 - Introduction and Setting up the REPL
-* DONE Part 2 - World’s Simplest SQL Compiler and Virtual Machine
-* DONE Part 3 - An In-Memory, Append-Only, Single-Table Database
-* DONE Part 4 - Our First Tests (and Bugs)
-* DONE Part 5 - Persistence to Disk
-* TODO Part 6 - The Cursor Abstraction
-* TODO Part 7 - Introduction to the B-Tree
-* TODO Part 8 - B-Tree Leaf Node Format
-* TODO Part 9 - Binary Search and Duplicate Keys
-* TODO Part 10 - Splitting a Leaf Node
-* TODO Part 11 - Recursively Searching the B-Tree
-* TODO Part 12 - Scanning a Multi-Level B-Tree
-* TODO Part 13 - Updating Parent Node After a Split
+* How Does a Database Work?
+- What format is data saved in? (in memory and on disk)
+- When does it move from memory to disk?
+- Why can there only be one primary key per table?
+- How does rolling back a transaction work?
+- How are indexes formatted?
+- When and how does a full table scan happen?
+- What format is a prepared statement saved in?
+
+* Todo
+- [X] Part 1 - Introduction and Setting up the REPL
+- [X] Part 2 - World’s Simplest SQL Compiler and Virtual Machine
+- [X] Part 3 - An In-Memory, Append-Only, Single-Table Database
+- [X] Part 4 - Our First Tests (and Bugs)
+- [X] Part 5 - Persistence to Disk
+- [ ] Part 6 - The Cursor Abstraction
+- [ ] Part 7 - Introduction to the B-Tree
+- [ ] Part 8 - B-Tree Leaf Node Format
+- [ ] Part 9 - Binary Search and Duplicate Keys
+- [ ] Part 10 - Splitting a Leaf Node
+- [ ] Part 11 - Recursively Searching the B-Tree
+- [ ] Part 12 - Scanning a Multi-Level B-Tree
+- [ ] Part 13 - Updating Parent Node After a Split
