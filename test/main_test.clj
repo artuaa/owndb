@@ -5,15 +5,19 @@
             [clojure.string :as str]))
 
 (defn run-script [ss]
-  (str/split-lines (:out (sh "./a.out" :in (str (str/join "\n" ss) "\n.exit ")))))
+  (str/split-lines (:out (sh "./a.out" "test.db" :in (str (str/join "\n" ss) "\n.exit ")))))
 
 (defmacro match [script expected]
   `(let [result# (run-script ~script)]
      (matcho/match result# ~expected)
      result#))
 
+(defn clear []
+  (sh "rm" "test.db"))
+
 (t/deftest main
   (t/testing "inserts and retrieves a row'"
+    (clear)
     (match
      ["insert 1 user1 person1@example.com"
       "select"
@@ -25,6 +29,7 @@
        "db > "]))
 
   (t/testing "prints error message when table is full"
+    (clear)
     (def res (->> (range 1 1402)
                   (map (fn [i] (format "insert %1$s user%1$s person%1$s@example.com" i)))
                   (run-script)))
@@ -32,7 +37,8 @@
     (t/is (= "db > Error: Table full." (nth res (- (count res) 2)))))
 
   (t/testing
-   "allows inserting strings that are the maximum length"
+    "allows inserting strings that are the maximum length"
+    (clear)
     (def long_username (apply str (repeat 32 "a")))
     (def long_email (apply str (repeat 255 "a")))
     (match
@@ -47,6 +53,7 @@
 
   (t/testing
    "prints error message if strings are too long"
+    (clear)
     (def long_username (apply str (repeat 33 "a")))
     (def long_email (apply str (repeat 256 "a")))
     (match
@@ -60,10 +67,28 @@
 
   (t/testing
    "prints an error message if id is negative"
+    (clear)
     (match
      ["insert -1 hey hey"
       "select"
       ".exit"]
       ["db > ID must be positive."
        "db > Executed."
-       "db > "])))
+       "db > "]))
+
+  (t/testing
+      "keeps data after closing connection"
+    (clear)
+    (match
+     ["insert 1 user1 person1@example.com"
+      ".exit"]
+     ["db > Executed."
+      "db > "])
+    (match
+     ["select"
+      ".exit"]
+     ["db > (1, user1, person1@example.com)",
+      "Executed."
+      "db > "]))
+
+  )
