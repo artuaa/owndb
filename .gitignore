@@ -130,3 +130,5 @@ clj-kondo.build_artifacts.txt
 /.clj-kondo/rewrite-clj
 
 *.db
+
+.clj-kondo

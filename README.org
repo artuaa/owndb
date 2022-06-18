@@ -15,7 +15,7 @@
 - When and how does a full table scan happen?
 - What format is a prepared statement saved in?
 
-* Todo
+* Todo [5/13]
 - [X] Part 1 - Introduction and Setting up the REPL
 - [X] Part 2 - World’s Simplest SQL Compiler and Virtual Machine
 - [X] Part 3 - An In-Memory, Append-Only, Single-Table Database
